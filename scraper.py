@@ -55,12 +55,17 @@ def scrape_news():
                     "betterThanExpected": better
                 })
                 
+             # This makes sure the file is created even if no news was found
         with open('news_feed.json', 'w') as f:
             json.dump(news_data, f, indent=2)
-        print(f"Successfully scraped {len(news_data)} events.")
+            
+        if len(news_data) > 0:
+            print(f"✅ Successfully scraped {len(news_data)} events.")
+        else:
+            print("⚠️ No news events found, but file created.")
 
     except Exception as e:
-        print(f"Error scraping news: {e}")
-
-if __name__ == "__main__":
-    scrape_news()
+        print(f"❌ Error: {e}")
+        # Create an empty list so the automation doesn't crash
+        with open('news_feed.json', 'w') as f:
+            json.dump([], f)
